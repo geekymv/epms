@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+"-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.epms.dao.EmployeeDAO">
+	<!-- 添加员工 -->
+	<insert id="add" parameterType="Employee">
+		insert into t_employees(empnum_, password_, name_, gender_, birthday_, phone_, email_, address_, jobtype_, 
+		emptype_, hiredate_, description_ ) values(#{empNum}, #{password}, #{name}, #{gender}, #{birthday}, 
+		#{phone}, #{email}, #{address}, #{jobType.id}, #{empType.id}, #{hiredate}, #{description})	
+	</insert>
+	
+	<!-- 修改员工信息 -->	
+	<update id="update" parameterType="Employee">
+		update t_employees set empnum_=#{empNum}, password_=#{password}, name_=#{name}, gender_=#{gender},
+		birthday_=#{birthday}, phone_=#{phone},email_=#{email}, address_=#{address}, jobtype_=#{jobType.id}, 
+		emptype_=#{empType.id}, hiredate_=#{hiredate}, description_=#{description} where empid_=#{id};
+	</update>
+	
+	<!-- 查询所有的职业 -->
+	<select id="jobTypes" resultType="JobType">
+		select jt.jtid_ id, jt.name_ name, jt.authority_ authority from t_job_types jt;
+	</select>
+	
+	<!-- 获得所有的员工类型 -->
+	<select id="empTypes" resultType="EmpType">
+		select et.etid_ id, et.name_ name from t_emp_types et;
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryByPage" resultMap="EmployeeResultMap">
+		select 
+		e.empid_, e.empnum_, e.password_, e.name_, e.gender_, e.birthday_, 
+		e.phone_, e.email_, e.address_, e.hiredate_, e.description_,
+		et.etid_, et.name_ etname_, 
+		jt.jtid_, jt.name_ jtname_, jt.authority_ from t_employees e, t_job_types jt, t_emp_types et 
+		where jt.jtid_=e.jobtype_ and et.etid_=e.emptype_ order by e.empid_ ASC limit #{pageOffset}, #{pageSize} 	
+	</select>
+	<!-- 获得总记录数 -->
+	<select id="totalRecord" resultType="int">
+		select count(*) from t_employees;
+	</select>
+	
+	<!-- 根据编号和密码查询员工信息 -->
+	<select id="find" resultMap="EmployeeResultMap">
+		select 
+		e.empid_, e.empnum_, e.password_, e.name_, e.gender_, e.birthday_, 
+		e.phone_, e.email_, e.address_, e.hiredate_, e.description_,
+		et.etid_, et.name_ etname_, 
+		jt.jtid_, jt.name_ jtname_, jt.authority_ from t_employees e, t_job_types jt, t_emp_types et 
+		where jt.jtid_=e.jobtype_ and et.etid_=e.emptype_ and e.empnum_=#{empnum} and e.password_=#{password}; 
+	</select>
+	
+	<!-- 根据员工编号查询 -->
+	<select id="queryByNumber" parameterType="int" resultMap="EmployeeResultMap">
+		select 
+		e.empid_, e.empnum_, e.password_, e.name_, e.gender_, e.birthday_, 
+		e.phone_, e.email_, e.address_, e.hiredate_, e.description_,
+		et.etid_, et.name_ etname_, 
+		jt.jtid_, jt.name_ jtname_, jt.authority_ from t_employees e, t_job_types jt, t_emp_types et 
+		where jt.jtid_=e.jobtype_ and et.etid_=e.emptype_ and e.empnum_=#{empNum}; 
+	</select>
+	
+	<!-- 根据id查询员工信息 -->
+	<select id="query" parameterType="int" resultMap="EmployeeResultMap">
+		select 
+		e.empid_, e.empnum_, e.password_, e.name_, e.gender_, e.birthday_, 
+		e.phone_, e.email_, e.address_, e.hiredate_, e.description_,
+		et.etid_, et.name_ etname_, 
+		jt.jtid_, jt.name_ jtname_, jt.authority_ from t_employees e, t_job_types jt, t_emp_types et 
+		where jt.jtid_=e.jobtype_ and et.etid_=e.emptype_ and e.empid_=#{id}; 
+	</select>
+	<resultMap type="Employee" id="EmployeeResultMap">
+		<id property="id" column="empid_"/>
+		<result property="empNum" column="empnum_"/>
+		<result property="password" column="password_"/>
+		<result property="name" column="name_"/>
+		<result property="gender" column="gender_"/>
+		<result property="birthday" column="birthday_"/>
+		<result property="phone" column="phone_"/>
+		<result property="email" column="email_"/>
+		<result property="address" column="address_"/>
+		<result property="hiredate" column="hiredate_"/>
+		<result property="description" column="description_"/>
+
+		<association property="jobType" javaType="JobType">
+			<id property="id" column="jtid_"/>
+			<result property="name" column="jtname_"/>
+			<result property="authority" column="authority_"/>
+		</association>
+
+		<association property="empType" javaType="EmpType">
+			<id property="id" column="etid_"/>
+			<result property="name" column="etname_"/>
+		</association>
+	</resultMap>
+</mapper>

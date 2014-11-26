@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link href="resource/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="resource/css/bootstrap-datetimepicker.css" rel="stylesheet">
+
+
+</head>
+<body>
+<div class="form-group">
+	<label for="dtp_input2" class="col-md-2 control-label">Date Picking</label>
+    <div class="input-group date form_date col-md-3" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+        <input class="form-control" size="16" type="text" value="" readonly>
+  <!--       <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> -->
+		<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+    </div>
+</div>
+
+<script type="text/javascript" src="resource/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="resource/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="resource/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+   $('.form_date').datetimepicker({
+	   format: 'yyyy年mm月dd日',
+       language: 'zh-CN',
+       weekStart: 1,
+       todayBtn:  1,
+	   autoclose: 1,
+	   todayHighlight: 1,
+	   startView: 2,
+	   minView: 2,
+	   forceParse: 0
+   });
+   
+</script>
+</body>
+</html>

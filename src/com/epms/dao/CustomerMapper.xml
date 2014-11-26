@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+"-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.epms.dao.CustomerDAO">
+
+	<!-- 添加客户 -->
+	<insert id="add" parameterType="Customer">
+		insert into t_customers(name_, contacts_, phone_, address_, background_, addtime_, remarks_ ) 
+		values(#{name}, #{contacts}, #{phone}, #{address}, #{background}, #{addtime}, #{remarks})
+	</insert>
+	
+	<!-- 分页查询 -->
+	<select id="queryByPage" resultType="Customer">
+		select cus.cusid_ id, cus.name_ name, cus.contacts_ contacts, cus.phone_ phone, cus.address_ address, 
+		cus.background_ background, cus.addtime_ addtime, cus.remarks_ remarks 
+		from t_customers cus limit #{pageOffset}, #{pageSize}
+	</select>
+	<!-- 查询总记录数 -->
+	<select id="totalRecord" resultType="int">
+		select count(*) from t_customers
+	</select>
+	
+	
+	<!-- 查询客户 -->
+	<select id="query" parameterType="int" resultType="Customer">
+		select cus.cusid_ id, cus.name_ name, cus.contacts_ contacts, cus.phone_ phone, cus.address_ address, 
+		cus.background_ background, cus.addtime_ addtime, cus.remarks_ remarks 
+		from t_customers cus where cus.cusid_=#{id} 	
+	</select>
+	
+	<!-- 修改客户信息 -->
+	<update id="update" parameterType="Customer">
+		update t_customers set name_=#{name}, contacts_=#{contacts}, phone_=#{phone}, 
+		address_=#{address}, background_=#{background}, addtime_=#{addtime}, 
+		remarks_=#{remarks} where cusid_=#{id};
+	</update>
+	
+</mapper>

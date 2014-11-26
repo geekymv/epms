@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+"-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.epms.dao.ProjectDAO">
+	
+	<!-- 添加项目 -->
+	<insert id="add" parameterType="Project">
+		insert into t_projects( name_, cusid, empid, devenum_, setupdate_, 
+		startdate_, actual_devdate_, actual_findate_, updatetime_, money_, actual_costs_, priority_, status_, remarks_ )
+		values(#{name}, #{customer.id}, #{employee.id}, #{devenum}, #{setupDate}, #{startDate}, #{actualDevDate}, 
+		#{actualFinDate}, #{updateTime}, #{money}, #{actualCosts}, #{priority}, #{status}, #{remarks});
+	</insert> 
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

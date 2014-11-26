@@ -1,0 +1,141 @@
+package com.epms.controller.employer;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.epms.pojo.EmpType;
+import com.epms.pojo.Employee;
+import com.epms.pojo.JobType;
+import com.epms.service.EmployeeService;
+import com.epms.service.impl.EmployeeServiceImpl;
+import com.epms.util.DateUtil;
+
+@WebServlet("/emp/update")
+public class UpdateEmployerController extends HttpServlet {
+	private static final long serialVersionUID = -8002080445456093989L;
+	
+	/**
+	 * 跳转到更新员工信息的页面
+	 */
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		String idStr = request.getParameter("id");
+		int id = 0;
+		if(idStr != null) {
+			id = Integer.parseInt(idStr);
+		}
+
+		EmployeeService employeeService = new EmployeeServiceImpl();
+		Employee employee = employeeService.query(id);
+		request.setAttribute("emp", employee);
+		
+		
+		List<JobType> jobTypes = employeeService.jobTypes();
+		request.setAttribute("jobTypes", jobTypes);
+		
+		List<EmpType> empTypes = employeeService.empTypes();
+		request.setAttribute("empTypes", empTypes);
+		
+		request.getRequestDispatcher("/WEB-INF/view/emp/edit.jsp").forward(request, response);
+	}
+	
+	/**
+	 * 更新员工信息
+	 */
+	@Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		EmployeeService employeeService = new EmployeeServiceImpl();
+		
+		Integer id = Integer.parseInt(request.getParameter("id"));
+		String empNum = request.getParameter("empNum");
+		String password = request.getParameter("password");
+		String name = request.getParameter("name");
+		String gender = request.getParameter("gender");
+		Date birthday = DateUtil.string2Date(request.getParameter("birthday"));
+		String phone = request.getParameter("phone");
+		String email = request.getParameter("email");
+		String address = request.getParameter("address");
+		
+		Integer empTypeId = Integer.parseInt(request.getParameter("empType"));
+		Integer jobTypeId = Integer.parseInt(request.getParameter("jobType"));
+		EmpType empType = new EmpType(empTypeId);
+		JobType jobType = new JobType(jobTypeId);
+		
+		Date hiredate = DateUtil.string2Date(request.getParameter("hiredate"));
+		String description = request.getParameter("description");
+		
+		Employee employee = employeeService.query(id);
+		if(!"".equals(password.trim())) {
+			employee.setPassword(password);
+		}
+		employee.setEmpNum(empNum);
+		employee.setName(name);
+		employee.setGender(gender);
+		employee.setBirthday(birthday);
+		employee.setPhone(phone);
+		employee.setEmail(email);
+		employee.setAddress(address);
+		employee.setHiredate(hiredate);
+		employee.setDescription(description);
+		employee.setEmpType(empType);
+		employee.setJobType(jobType);
+		
+		
+		System.out.println("id = " + id);
+		System.out.println("empnum = " + empNum);
+		System.out.println("name = " + name);
+		System.out.println("password = " + password );
+		System.out.println("gender = " + gender);
+		System.out.println("birthday = " + DateUtil.date2String(birthday));
+		System.out.println("phone = " + phone);
+		System.out.println("email = " + email);
+		System.out.println("address = " + address);
+		System.out.println("hiredate = " + DateUtil.date2String(hiredate));
+		System.out.println("description = " + description);
+		 
+		int res = employeeService.update(employee);
+		
+		if(res == 1) {
+			response.sendRedirect(request.getContextPath() + "/emps");
+		}
+	}	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

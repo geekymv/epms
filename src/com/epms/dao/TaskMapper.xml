@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+"-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.epms.dao.TaskDAO">
+	
+	<!-- 添加任务 -->
+	<insert id="add" parameterType="Task">
+		insert into t_tasks( title_, period_, creator_, createtime_, executor_,starttime_, endtime_, priority_, explain_, status_ )
+		values (#{title}, #{period}, #{creator.id}, #{createtime}, #{executor.id}, #{starttime}, #{endtime}, #{priority}, 
+		#{explain}, #{status})
+	</insert>
+	
+	
+	<!-- 分页查询 -->
+	<select id="queryByPage" parameterType="int" resultMap="TaskResultMap">
+		select * from t_tasks limit #{pageOffset}, #{pageSize}
+	</select>
+	<!-- 获得总记录数 -->
+	<select id="totalRecord" resultType="int">
+		select count(*) from t_tasks
+	</select>
+	
+	<!-- 查询任务 -->
+	<select id="query" parameterType="int" resultMap="TaskResultMap">
+		select * from t_tasks where tasid_=#{id}
+	</select>
+	<resultMap type="Task" id="TaskResultMap">
+		<id property="id" column="tasid_"/>
+		<result property="title" column="title_"/>
+		<result property="period" column="period_"/>
+		<result property="createtime" column="createtime_"/>
+		<result property="starttime" column="starttime_"/>
+		<result property="endtime" column="endtime_"/>
+		<result property="priority" column="priority_"/>
+		<result property="explain" column="explain_"/>
+		<result property="status" column="status_"/>
+		
+		<association property="creator" column="creator_" select="queryCreator"></association>
+		<association property="executor" column="executor_" select="queryExecutor"></association>
+	</resultMap>
+	<select id="queryCreator" parameterType="int" resultType="Employee">
+		select e.empid_ id, e.empnum_ empNum, e.name_ name from t_employees e where e.empid_=#{id}
+	</select>
+	<select id="queryExecutor" parameterType="int" resultType="Employee">
+		select e.empid_ id, e.empnum_ empNum, e.name_ name from t_employees e where e.empid_=#{id}
+	</select>
+	
+	<!-- 更新任务 -->
+	<update id="update" parameterType="Task">
+		update t_tasks set title_=#{title}, period_=#{period}, creator_=#{creator.id},
+		createtime_=#{createtime}, executor_=#{executor.id}, starttime_=#{starttime},
+		endtime_=#{endtime}, priority_=#{priority}, explain_=#{explain}, status_=#{status} where tasid_=#{id}
+	</update>
+	
+	<!-- 删除任务 -->
+	<delete id="delete" parameterType="int">
+		delete from t_tasks where tasid_=#{id};
+	</delete>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
